@@ -19,3 +19,6 @@
 * [1.05.2026 Patch #2](obnovleniya/2025-2026/patch-2.md)
 * [12.01.2025](obnovleniya/12.01.2025.md)
 * [Version log from 0.4 to 1.8](obnovleniya/04-1_8.md)
+
+## Other
+* [⭐ Achievements](achievements.md)
