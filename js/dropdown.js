@@ -30,7 +30,6 @@ function initDropdown(trigger, menu) {
         box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
         backdrop-filter: blur(16px) saturate(150%);
         -webkit-backdrop-filter: blur(16px) saturate(150%);
-        line-height: 1;
     `;
 
     let rafId = null;
