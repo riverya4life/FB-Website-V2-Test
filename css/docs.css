@@ -315,11 +315,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 16px;
+  margin: 2px 8px;
+  padding: 7px 12px;
   font-size: 13.5px;
   color: var(--docs-text-muted);
   cursor: pointer;
   border-left: 2px solid transparent;
+  border-radius: 7px;
   transition:
     color 0.12s,
     background 0.12s,
@@ -336,17 +338,20 @@
   color: var(--docs-text-strong);
   border-left-color: var(--accent);
   background: var(--docs-hover-bg);
+  animation: sb-active-border-in 0.35s ease;
 }
 
 .sb-group-toggle {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 16px;
+  margin: 2px 8px;
+  padding: 7px 12px;
   font-size: 13.5px;
   color: var(--docs-text-muted);
   cursor: pointer;
   border-left: 2px solid transparent;
+  border-radius: 7px;
   transition:
     color 0.12s,
     background 0.12s;
@@ -377,11 +382,13 @@
 .sb-child {
   display: flex;
   align-items: center;
-  padding: 5px 16px 5px 28px;
+  margin: 2px 8px;
+  padding: 6px 12px 6px 24px;
   font-size: 13px;
   color: var(--docs-text-muted);
   cursor: pointer;
   border-left: 2px solid transparent;
+  border-radius: 7px;
   transition:
     color 0.12s,
     background 0.12s,
@@ -396,6 +403,16 @@
   color: var(--docs-text-strong);
   border-left-color: var(--accent);
   background: var(--docs-hover-bg);
+  animation: sb-active-border-in 0.35s ease;
+}
+
+@keyframes sb-active-border-in {
+  from {
+    border-left-color: transparent;
+  }
+  to {
+    border-left-color: var(--accent);
+  }
 }
 
 .sb-footer {

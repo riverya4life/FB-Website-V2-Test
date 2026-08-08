@@ -1708,8 +1708,27 @@ body:not(.dark) .social-link:hover .fa-github {
     min-width: 230px;
   }
 
+  /* FIX: на мобильном сам дропдаун настроек/навигации крупнее — легче попасть
+     пальцем: шире блок, крупнее пункты, отступы и иконки */
   .dropdown {
-    min-width: 240px;
+    min-width: 245px;
+    padding: 5px;
+  }
+
+  .dropdown-item {
+    padding: 11px 13px;
+    font-size: 0.95rem;
+    gap: 11px;
+  }
+
+  .dropdown-item svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .dropdown-label {
+    padding: 9px 13px;
+    font-size: 0.95rem;
   }
 
   /* Toast: по центру в одну строку на мобайле */
