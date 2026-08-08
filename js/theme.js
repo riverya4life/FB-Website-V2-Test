@@ -1,38 +1,54 @@
 // ==================== THEME TOGGLE ====================
-const lightBtn = document.getElementById('light-btn');
-const darkBtn = document.getElementById('dark-btn');
+
+const html = document.documentElement; // Лучше использовать <html>
 const body = document.body;
 
-function setTheme(theme) {
+const lightBtn = document.getElementById('light-btn');
+const darkBtn = document.getElementById('dark-btn');
+const themeToggleItemEl = document.getElementById('theme-toggle-item');
+
+// Основная функция переключения
+function setTheme(theme, saveToStorage = true) {
     if (theme === 'dark') {
-        body.classList.add('dark');
-        if (lightBtn) lightBtn.classList.remove('active');
-        if (darkBtn) darkBtn.classList.add('active');
-        localStorage.setItem('theme', 'dark');
+        html.classList.add('dark');
+        body.classList.add('dark'); // на всякий случай
+        lightBtn?.classList.remove('active');
+        darkBtn?.classList.add('active');
     } else {
+        html.classList.remove('dark');
         body.classList.remove('dark');
-        if (darkBtn) darkBtn.classList.remove('active');
-        if (lightBtn) lightBtn.classList.add('active');
-        localStorage.setItem('theme', 'light');
+        darkBtn?.classList.remove('active');
+        lightBtn?.classList.add('active');
     }
+
+    if (saveToStorage) {
+        localStorage.setItem('theme', theme);
+    }
+
     updateThemeToggleUI();
 }
 
-// Load saved theme or default to dark
-const savedTheme = localStorage.getItem('theme') || 'dark';
-setTheme(savedTheme);
+// Определение начальной темы
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-if (lightBtn) lightBtn.addEventListener('click', () => setTheme('light'));
-if (darkBtn) darkBtn.addEventListener('click', () => setTheme('dark'));
+    if (savedTheme) {
+        setTheme(savedTheme, false);
+    } else {
+        // Если нет сохранённой — используем системную
+        setTheme(prefersDark ? 'dark' : 'light', false);
+    }
+}
 
-// ==================== SINGLE THEME TOGGLE (именно та кнопка, которую ты показал) ====================
+// Обновление текста и иконки в дропдауне
 function updateThemeToggleUI() {
-    const toggleItem = document.getElementById('theme-toggle-item');
     const icon = document.getElementById('theme-toggle-icon');
     const textEl = document.getElementById('theme-toggle-text');
-    if (!toggleItem || !icon || !textEl) return;
+    
+    if (!icon || !textEl) return;
 
-    const isDark = body.classList.contains('dark');
+    const isDark = html.classList.contains('dark');
     const currentLang = (window.getCurrentLanguage && window.getCurrentLanguage()) || 'ru';
     const t = window.translations || {};
     const langTranslations = t[currentLang] || t.ru || {};
@@ -40,24 +56,39 @@ function updateThemeToggleUI() {
     if (isDark) {
         icon.className = 'fa-solid fa-sun';
         textEl.dataset.i18n = 'dropdown_theme_light';
-        textEl.textContent = langTranslations.dropdown_theme_light || 'Включить светлую тему';
+        textEl.textContent = langTranslations.dropdown_theme_light || 'Светлая тема';
     } else {
         icon.className = 'fa-solid fa-moon';
         textEl.dataset.i18n = 'dropdown_theme_dark';
-        textEl.textContent = langTranslations.dropdown_theme_dark || 'Включить тёмную тему';
+        textEl.textContent = langTranslations.dropdown_theme_dark || 'Тёмная тема';
     }
 }
 
-// Initial update
-updateThemeToggleUI();
+// ==================== Обработчики ====================
 
-// Клик именно на ту кнопку, которую ты показал
-const themeToggleItemEl = document.getElementById('theme-toggle-item');
+// Кнопки Светлая / Тёмная (если есть)
+lightBtn?.addEventListener('click', () => setTheme('light'));
+darkBtn?.addEventListener('click', () => setTheme('dark'));
+
+// Основная кнопка в дропдауне
 if (themeToggleItemEl) {
     themeToggleItemEl.addEventListener('click', (e) => {
         e.stopPropagation();
-        const isCurrentlyDark = body.classList.contains('dark');
-        const newTheme = isCurrentlyDark ? 'light' : 'dark';
-        setTheme(newTheme);
+        const isCurrentlyDark = html.classList.contains('dark');
+        setTheme(isCurrentlyDark ? 'light' : 'dark');
     });
 }
+
+// Слушаем изменение системной темы (если пользователь меняет в настройках ОС)
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    const savedTheme = localStorage.getItem('theme');
+    if (!savedTheme) {
+        setTheme(e.matches ? 'dark' : 'light');
+    }
+});
+
+// Инициализация при загрузке
+document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
+    updateThemeToggleUI();
+});

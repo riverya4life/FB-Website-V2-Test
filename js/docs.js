@@ -12,8 +12,32 @@ function toggleMobileMenu() {
 function getDocLang() {
   return localStorage.getItem("siteLanguage") || "ru";
 }
+// ─── ИСТОЧНИК MD-ФАЙЛОВ (репозиторий документации на GitHub) ───
+const DOCS_REPO_OWNER = "fistashkinbot";
+const DOCS_REPO_NAME = "fistashkin-docs";
+const DOCS_REPO_BRANCH = "main";
+
 function getBasePath(lang) {
-  return `docs/${lang || getDocLang()}/`;
+  return `https://raw.githubusercontent.com/${DOCS_REPO_OWNER}/${DOCS_REPO_NAME}/${DOCS_REPO_BRANCH}/docs/${lang || getDocLang()}/`;
+}
+
+// Путь файла относительно корня репозитория (для GitHub API)
+function getDocsRepoPath(lang, file) {
+  return `docs/${lang || getDocLang()}/${file}`;
+}
+
+// Дата последнего коммита, затронувшего файл (берётся из GitHub API, а не с локальной машины)
+async function fetchLastCommitDate(lang, file) {
+  const path = getDocsRepoPath(lang, file);
+  const url = `https://api.github.com/repos/${DOCS_REPO_OWNER}/${DOCS_REPO_NAME}/commits?path=${encodeURIComponent(path)}&sha=${DOCS_REPO_BRANCH}&per_page=1`;
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    return data?.[0]?.commit?.committer?.date || data?.[0]?.commit?.author?.date || null;
+  } catch (e) {
+    return null;
+  }
 }
 
 // Кэш
@@ -333,13 +357,15 @@ async function loadDocPage(file, lang) {
 
   if (!raw) {
     try {
-      const resp = await fetch(BASE_PATH + file);
+      const [resp, lastModified] = await Promise.all([
+        fetch(BASE_PATH + file),
+        fetchLastCommitDate(lang, file)
+      ]);
       if (!resp.ok) throw new Error();
 
       raw = await resp.text();
       cache[file] = { content: raw };
 
-      const lastModified = resp.headers.get('Last-Modified');
       if (lastModified) {
         cache[file].lastModified = lastModified;
       }

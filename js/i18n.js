@@ -425,41 +425,26 @@ const toastMessages = {
 function showLanguageToast(lang) {
     if (currentToast) currentToast.remove();
 
+    // FIX: позиционирование (position/bottom/right + центрирование на мобильном)
+    // теперь целиком в CSS-классе .toast (см. style.css), инлайном задаём только
+    // то, что не завязано на брейкпоинты — иначе inline-стили всегда перебивали
+    // бы media query для мобильного центрирования.
     const toast = document.createElement('div');
     toast.className = 'toast';
-    toast.style.cssText = `
-        position: fixed; 
-        bottom: 20px; 
-        right: 20px; 
-        background: rgba(0, 0, 0, 0);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        padding: 14px 22px; 
-        border-radius: 10px; 
-        font-size: 15px; 
-        z-index: 10000;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-        opacity: 0;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-family: 'Poppins', sans-serif;
-    `;
 
     toast.innerHTML = toastMessages[lang] || 'Language changed';
     document.body.appendChild(toast);
     currentToast = toast;
 
     setTimeout(() => {
+        toast.classList.add('toast-show');
         toast.style.opacity = '1';
-        toast.style.transform = 'translateY(-8px)';
     }, 10);
 
     setTimeout(() => {
         if (currentToast === toast) {
+            toast.classList.remove('toast-show');
             toast.style.opacity = '0';
-            toast.style.transform = 'translateY(10px)';
             setTimeout(() => {
                 if (currentToast === toast) {
                     toast.remove();
