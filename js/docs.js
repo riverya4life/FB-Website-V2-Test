@@ -21,23 +21,22 @@ function getBasePath(lang) {
   return `https://raw.githubusercontent.com/${DOCS_REPO_OWNER}/${DOCS_REPO_NAME}/${DOCS_REPO_BRANCH}/docs/${lang || getDocLang()}/`;
 }
 
-// Путь файла относительно корня репозитория (для GitHub API)
+// Путь файла относительно корня репозитория (используется как ключ в manifest.json)
 function getDocsRepoPath(lang, file) {
-  return `docs/${lang || getDocLang()}/${file}`;
+  return `${lang || getDocLang()}/${file}`;
 }
 
-// Дата последнего коммита, затронувшего файл (берётся из GitHub API, а не с локальной машины)
-async function fetchLastCommitDate(lang, file) {
-  const path = getDocsRepoPath(lang, file);
-  const url = `https://api.github.com/repos/${DOCS_REPO_OWNER}/${DOCS_REPO_NAME}/commits?path=${encodeURIComponent(path)}&sha=${DOCS_REPO_BRANCH}&per_page=1`;
-  try {
-    const resp = await fetch(url);
-    if (!resp.ok) return null;
-    const data = await resp.json();
-    return data?.[0]?.commit?.committer?.date || data?.[0]?.commit?.author?.date || null;
-  } catch (e) {
-    return null;
+// manifest.json генерируется GitHub Action'ом в репозитории документации
+// и содержит даты последних коммитов для всех .md файлов — грузим его один раз и кэшируем
+let manifestPromise = null;
+function loadManifest() {
+  if (!manifestPromise) {
+    const url = `https://raw.githubusercontent.com/${DOCS_REPO_OWNER}/${DOCS_REPO_NAME}/${DOCS_REPO_BRANCH}/docs/manifest.json`;
+    manifestPromise = fetch(url)
+      .then((r) => (r.ok ? r.json() : {}))
+      .catch(() => ({}));
   }
+  return manifestPromise;
 }
 
 // Кэш
@@ -357,15 +356,16 @@ async function loadDocPage(file, lang) {
 
   if (!raw) {
     try {
-      const [resp, lastModified] = await Promise.all([
+      const [resp, manifest] = await Promise.all([
         fetch(BASE_PATH + file),
-        fetchLastCommitDate(lang, file)
+        loadManifest()
       ]);
       if (!resp.ok) throw new Error();
 
       raw = await resp.text();
       cache[file] = { content: raw };
 
+      const lastModified = manifest[getDocsRepoPath(lang, file)];
       if (lastModified) {
         cache[file].lastModified = lastModified;
       }
