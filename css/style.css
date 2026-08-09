@@ -27,6 +27,9 @@
   --nav-text: #18181b;
   --nav-hover-glow: rgba(0, 0, 0, 0.2);
   --nav-mobile-bg: rgba(255, 255, 255, 0.85);
+  --nav-pill-bg: rgba(255, 255, 255, 0.85);
+  --nav-pill-bg-sticky: rgba(255, 255, 255, 0.96);
+  --nav-pill-border: rgba(0, 0, 0, 0.08);
 
   --hero-grad-start: #f3d7c8;
   --hero-grad-end: #f8f9fa;
@@ -97,6 +100,9 @@
   --nav-text: #fff;
   --nav-hover-glow: rgba(255, 255, 255, 0.7);
   --nav-mobile-bg: rgba(0, 0, 0, 0.75);
+  --nav-pill-bg: rgba(20, 20, 24, 0.85);
+  --nav-pill-bg-sticky: rgba(14, 14, 17, 0.94);
+  --nav-pill-border: rgba(255, 255, 255, 0.08);
 
   --hero-grad-start: #592222;
   --hero-grad-end: #000000;
@@ -213,25 +219,41 @@ body {
 
 .navbar {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  padding: 30px 0;
+  display: flex;
+  justify-content: center;
+  padding: 20px 24px 0;
   font-family: "Ubuntu", sans-serif;
-  transition: all 0.3s ease;
+  transition: padding 0.3s ease;
   z-index: 9999;
 }
 
 .navbar.sticky {
-  padding: 15px 0;
-  background: var(--nav-bg-sticky) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px); /* FIX: iOS */
+  padding: 12px 24px 0;
 }
 
 .navbar .max-width {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  column-gap: 20px;
+  column-gap: 32px;
+  width: 100%;
+  max-width: 900px;
+  padding: 14px 16px 14px 26px;
+  border-radius: 16px;
+  background: var(--nav-bg-sticky);
+  border: 1px solid var(--nav-pill-border);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%); /* FIX: iOS */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar.sticky .max-width {
+  background: var(--nav-bg-sticky);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.4);
 }
 
 .navbar .logo {
@@ -245,9 +267,13 @@ body {
 }
 
 .navbar .logo a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   color: var(--nav-text);
-  font-size: 35px;
+  font-size: 17px;
   font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .navbar .logo a span {
@@ -264,7 +290,7 @@ body {
   justify-self: center;
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 28px;
 }
 
 .navbar .menu li {
@@ -272,16 +298,18 @@ body {
 }
 
 .navbar .menu li a {
-  display: block;
-  color: var(--nav-text);
-  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 14px;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: color 0.2s ease, filter 0.2s ease;
 }
 
 .navbar .menu li a:hover {
   color: #c0694e;
-  filter: drop-shadow(0 0 5px rgba(192, 105, 78, 0.7));
+  filter: drop-shadow(0 0 5px rgba(192, 105, 78, 0.5));
 }
 
 .navbar.sticky .menu li a:hover {
@@ -289,9 +317,15 @@ body {
   filter: drop-shadow(0 0 5px var(--nav-hover-glow));
 }
 
+.navbar .dropdown-wrapper .btn {
+  padding: 8px 14px;
+  margin-left: 0;
+  font-size: 0.8125rem;
+}
+
 .menu-btn {
   color: var(--nav-text);
-  font-size: 23px;
+  font-size: 20px;
   cursor: pointer;
   display: none;
 }
@@ -1716,8 +1750,6 @@ body:not(.dark) .social-link:hover .fa-github {
   }
 
   .dropdown-item {
-    padding: 11px 13px;
-    font-size: 0.95rem;
     gap: 11px;
   }
 
@@ -1727,7 +1759,6 @@ body:not(.dark) .social-link:hover .fa-github {
   }
 
   .dropdown-label {
-    padding: 9px 13px;
     font-size: 0.95rem;
   }
 
