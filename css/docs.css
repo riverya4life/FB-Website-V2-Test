@@ -159,6 +159,11 @@
   font-family: "Ubuntu", sans-serif;
   transition: padding 0.3s ease;
   z-index: 9999;
+  /* FIX: iOS — держим навбар на отдельном GPU-слое, иначе backdrop-filter
+     внутри .max-width заставляет Safari "отклеивать" fixed от вьюпорта во время скролла */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
 }
 .docs-navbar.sticky {
   padding: 12px 24px 0;
@@ -1186,5 +1191,14 @@ pre:hover .code-copy {
   }
   .doc-toolbar {
     flex-wrap: wrap;
+  }
+}
+
+/* FIX: iOS — тяжёлый backdrop-filter на fixed-навбаре лагает при скролле
+   и Safari визуально "отклеивает" пилюлю от вьюпорта; урезаем блюр только на iOS */
+@supports (-webkit-touch-callout: none) {
+  .docs-navbar .max-width {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 }
