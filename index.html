@@ -505,9 +505,16 @@
           }, 400);
         }
       }
+      // FIX: раньше ждали window.load — оно срабатывает только когда ДОГРУЗИТСЯ
+      // абсолютно всё (шрифты, cdnjs-скрипты, картинки). На слабой мобильной
+      // сети это может занимать много секунд — экран всё это время чёрный
+      // под лоадером. DOMContentLoaded фактически совпадает с готовностью
+      // видимого контента (HTML распарсен, defer-скрипты выполнены), поэтому
+      // прячем лоадер по нему, а window.load/pageshow оставляем как подстраховку.
+      document.addEventListener("DOMContentLoaded", hideLoader);
       window.addEventListener("load", hideLoader);
       window.addEventListener("pageshow", hideLoader);
-      setTimeout(hideLoader, 3500);
+      setTimeout(hideLoader, 1500);
     </script>
 
     <!-- FIX: docs ссылки -->
