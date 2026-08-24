@@ -365,8 +365,14 @@
   left: 0;
   bottom: 0;
   width: 268px;
+  background: var(--docs-nav-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  /* FIX: iOS — свой GPU-слой, чтобы блюр сайдбара не рвался на стыке
+     с blur(4px) у .doc-sb-overlay рядом */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 100;
@@ -1116,6 +1122,13 @@ pre:hover .code-copy {
   inset: 0;
   background: var(--docs-overlay-bg);
   z-index: 99;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px); /* FIX: iOS */
+  /* FIX: iOS — свой GPU-слой, иначе блюр оверлея визуально "рвётся" на стыке
+     с blur(16px) у .docs-sidebar (тот же класс бага, что и с навбаром) */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 /* ─── АДАПТИВ ─── */
@@ -1129,12 +1142,32 @@ pre:hover .code-copy {
 }
 
 @media (max-width: 768px) {
+  /* ─── МОБИЛЬНОЕ МЕНЮ ДОКОВ — bottom sheet, отдельный UI от десктоп-сайдбара ─── */
   .docs-sidebar {
-    transform: translateX(-100%);
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    max-height: 78vh;
+    border-radius: 20px 20px 0 0;
+    padding-top: 10px;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    box-shadow: 0 -12px 40px var(--docs-shadow-strong);
+  }
+  .docs-sidebar::before {
+    content: "";
+    display: block;
+    width: 36px;
+    height: 4px;
+    margin: 0 auto 10px;
+    border-radius: 3px;
+    background: var(--docs-border-medium);
+    flex-shrink: 0;
   }
   .docs-sidebar.open {
     transform: none;
-    box-shadow: 4px 0 32px var(--docs-shadow-strong);
   }
   .doc-sb-overlay.open {
     display: block;
