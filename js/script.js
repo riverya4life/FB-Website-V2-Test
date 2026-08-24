@@ -5,6 +5,11 @@ $(document).ready(function () {
     if (!scrollTicking) {
       requestAnimationFrame(function () {
         var scrollY = window.scrollY;
+        if (scrollY > 20) {
+          $(".navbar").addClass("sticky");
+        } else {
+          $(".navbar").removeClass("sticky");
+        }
         if (scrollY > 500) {
           $(".scroll-up-btn").addClass("show");
         } else {
