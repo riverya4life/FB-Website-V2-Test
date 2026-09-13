@@ -27,7 +27,9 @@ function handleResize() {
   clearTimeout(resizeDebounce);
   resizeDebounce = setTimeout(() => {
     const newWidth = window.innerWidth;
-    const widthChanged = Math.abs(newWidth - lastWidth) > 1;
+    // Порог 50px — реальный поворот экрана/смена окна меняет ширину на
+    // десятки-сотни пикселей, любой мелкий дребезг измерения игнорируется.
+    const widthChanged = Math.abs(newWidth - lastWidth) > 50;
 
     canvas.width = newWidth;
     canvas.height = window.innerHeight;
