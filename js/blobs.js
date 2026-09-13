@@ -11,7 +11,37 @@ function resizeCanvas() {
   createBlobs();
 }
 
-window.addEventListener('resize', resizeCanvas);
+// FIX: на мобильных браузерах скролл сворачивает/разворачивает адресную
+// строку, а это меняет window.innerHeight и раньше вызывало срабатывание
+// resize -> resizeCanvas() -> полный сброс blobs[] и createBlobs() с
+// НОВЫМИ случайными цветами и позициями. Визуально это выглядело как
+// резкая вспышка/смена цвета свечения прямо во время скролла.
+// Теперь при resize пересоздаём блобы (новые цвета/позиции) только если
+// реально изменилась ШИРИНА окна (поворот экрана, ресайз окна на десктопе).
+// Если изменилась только высота (мобильная адресная строка), просто
+// подгоняем размеры канваса под неё, не трогая состояние блобов.
+let lastWidth = window.innerWidth;
+let resizeDebounce;
+
+function handleResize() {
+  clearTimeout(resizeDebounce);
+  resizeDebounce = setTimeout(() => {
+    const newWidth = window.innerWidth;
+    const widthChanged = Math.abs(newWidth - lastWidth) > 1;
+
+    canvas.width = newWidth;
+    canvas.height = window.innerHeight;
+
+    if (widthChanged) {
+      blobs = [];
+      createBlobs();
+    }
+
+    lastWidth = newWidth;
+  }, 150);
+}
+
+window.addEventListener('resize', handleResize);
 
 // Новая палитра (RGB)
 const colors = [
