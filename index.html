@@ -169,77 +169,75 @@
     </nav>
 
     <section class="home" id="home">
-      <div class="blob-outer-container">
-        <div class="blob-inner-container">
-          <div class="blob"></div>
-        </div>
-      </div>
+      <canvas id="blobCanvas"></canvas>
       <div class="max-width">
         <div class="home-content">
-          <div class="text-1">
-            <span data-i18n="home_content_text_1"></span>
+          <div data-aos="fade-down" data-aos-duration="1000" data-aos-once="true">
+            <div class="text-1">
+              <span data-i18n="home_content_text_1"></span>
+            </div>
+            <div class="text-2">
+              <span data-i18n="home_content_text_2"></span>
+            </div>
+            <div class="text-3">
+              <span data-i18n="home_content_text_3"></span
+              ><span class="typing"></span>
+            </div>
+            <!-- FIX: window.open() → обычная ссылка, iOS Safari блокирует попапы -->
+            <a
+              href="https://discord.com/api/oauth2/authorize?client_id=991338113630752928&permissions=8&scope=applications.commands%20bot"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+            
+              <button class="this-is-pain">
+                <i class="fab fa-discord"></i
+                ><span data-i18n="home_cta_button"></span>
+                <div class="star-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 784.11 815.53" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="Layer_x0020_1">
+                      <path class="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z"></path>
+                    </g>
+                  </svg>
+                </div>
+                <div class="star-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 784.11 815.53" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="Layer_x0020_1">
+                      <path class="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z"></path>
+                    </g>
+                  </svg>
+                </div>
+                <div class="star-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 784.11 815.53" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="Layer_x0020_1">
+                      <path class="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z"></path>
+                    </g>
+                  </svg>
+                </div>
+                <div class="star-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 784.11 815.53" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="Layer_x0020_1">
+                      <path class="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z"></path>
+                    </g>
+                  </svg>
+                </div>
+                <div class="star-5">
+                  <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 784.11 815.53" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="Layer_x0020_1">
+                      <path class="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z"></path>
+                    </g>
+                  </svg>
+                </div>
+                <div class="star-6">
+                  <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 784.11 815.53" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="Layer_x0020_1">
+                      <path class="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z"></path>
+                    </g>
+                  </svg>
+                </div>
+              </button>
+            </a>
           </div>
-          <div class="text-2">
-            <span data-i18n="home_content_text_2"></span>
-          </div>
-          <div class="text-3">
-            <span data-i18n="home_content_text_3"></span
-            ><span class="typing"></span>
-          </div>
-          <!-- FIX: window.open() → обычная ссылка, iOS Safari блокирует попапы -->
-          <a
-            href="https://discord.com/api/oauth2/authorize?client_id=991338113630752928&permissions=8&scope=applications.commands%20bot"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-          
-            <button class="this-is-pain">
-              <i class="fab fa-discord"></i
-              ><span data-i18n="home_cta_button"></span>
-              <div class="star-1">
-                <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 784.11 815.53" xmlns:xlink="http://www.w3.org/1999/xlink">
-                  <g id="Layer_x0020_1">
-                    <path class="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z"></path>
-                  </g>
-                </svg>
-              </div>
-              <div class="star-2">
-                <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 784.11 815.53" xmlns:xlink="http://www.w3.org/1999/xlink">
-                  <g id="Layer_x0020_1">
-                    <path class="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z"></path>
-                  </g>
-                </svg>
-              </div>
-              <div class="star-3">
-                <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 784.11 815.53" xmlns:xlink="http://www.w3.org/1999/xlink">
-                  <g id="Layer_x0020_1">
-                    <path class="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z"></path>
-                  </g>
-                </svg>
-              </div>
-              <div class="star-4">
-                <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 784.11 815.53" xmlns:xlink="http://www.w3.org/1999/xlink">
-                  <g id="Layer_x0020_1">
-                    <path class="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z"></path>
-                  </g>
-                </svg>
-              </div>
-              <div class="star-5">
-                <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 784.11 815.53" xmlns:xlink="http://www.w3.org/1999/xlink">
-                  <g id="Layer_x0020_1">
-                    <path class="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z"></path>
-                  </g>
-                </svg>
-              </div>
-              <div class="star-6">
-                <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 784.11 815.53" xmlns:xlink="http://www.w3.org/1999/xlink">
-                  <g id="Layer_x0020_1">
-                    <path class="fil0" d="M392.05 0c-20.9,210.08 -184.06,378.41 -392.05,407.78 207.96,29.37 371.12,197.68 392.05,407.74 20.93,-210.06 184.09,-378.37 392.05,-407.74 -207.98,-29.38 -371.16,-197.69 -392.06,-407.78z"></path>
-                  </g>
-                </svg>
-              </div>
-            </button>
-          </a>
         </div>
       </div>
     </section>
@@ -485,6 +483,7 @@
 
     <!-- Scripts в конце body — не блокируют рендер -->
     <script src="./js/i18n.js" defer></script>
+    <script src="./js/blobs.js" defer></script>
     <script src="./js/check_status.js" defer></script>
     <script src="./js/script.js" defer></script>
     <script src="./js/particles.js" defer></script>

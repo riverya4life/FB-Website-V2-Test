@@ -375,7 +375,11 @@ async function loadDocPage(file, lang) {
     }
   }
 
-  doc.innerHTML = renderDocMd(raw);
+  // Оборачиваем свежерендеренный контент в data-aos — сам renderDocMd()
+  // отдаёт «голый» HTML без анимационных атрибутов, а предыдущий узел
+  // с data-aos (тот, что был вокруг спиннера) в этот момент уже удалён
+  // вместе со спиннером через doc.innerHTML выше.
+  doc.innerHTML = `<div data-aos="fade-up" data-aos-duration="600" data-aos-once="true">${renderDocMd(raw)}</div>`;
 
   // Якоря для заголовков
   doc.querySelectorAll("h1,h2,h3,h4").forEach((h) => {
@@ -412,6 +416,13 @@ async function loadDocPage(file, lang) {
   buildDocTOC();
   buildDocPageNav(file);
   window.scrollTo(0, 0);
+
+  // AOS сканирует DOM один раз при AOS.init() (DOMContentLoaded) — новый
+  // data-aos, вставленный только что через doc.innerHTML выше, ему
+  // неизвестен без явного refresh. refreshHard() пересобирает список
+  // элементов и, так как мы уже сделали scrollTo(0,0), контент окажется
+  // в области видимости и анимация проиграется сразу.
+  if (typeof AOS !== "undefined") AOS.refreshHard();
 }
 
 // ─── ПРАВАЯ ПАНЕЛЬ ───

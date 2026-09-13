@@ -20,6 +20,7 @@
 
   --docs-panel-bg: rgba(255, 255, 255, 0.7);
   --docs-hover-bg: rgba(0, 0, 0, 0.04);
+  --docs-hover-bg-active: rgba(192, 105, 78, 0.2);
   --docs-hover-bg-strong: rgba(0, 0, 0, 0.06);
 
   --docs-border-faint: rgba(0, 0, 0, 0.05);
@@ -92,6 +93,7 @@
 
   --docs-panel-bg: rgba(18, 18, 18, 0.3);
   --docs-hover-bg: rgba(255, 255, 255, 0.04);
+  --docs-hover-bg-active: rgba(192, 105, 78, 0.1);
   --docs-hover-bg-strong: rgba(255, 255, 255, 0.07);
 
   --docs-border-faint: rgba(255, 255, 255, 0.05);
@@ -365,7 +367,6 @@
   left: 0;
   bottom: 0;
   width: 268px;
-  background: var(--docs-nav-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   /* FIX: iOS — свой GPU-слой, чтобы блюр сайдбара не рвался на стыке
@@ -431,7 +432,7 @@
 .sb-item.active {
   color: var(--docs-text-strong);
   border-left-color: var(--accent);
-  background: var(--docs-hover-bg);
+  background: var(--docs-hover-bg-active);
   animation: sb-active-border-in 0.35s ease;
 }
 
@@ -503,9 +504,11 @@
 @keyframes sb-active-border-in {
   from {
     border-left-color: transparent;
+    background: transparent;
   }
   to {
     border-left-color: var(--accent);
+    background: var(--docs-hover-bg-active);
   }
 }
 

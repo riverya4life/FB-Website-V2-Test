@@ -151,9 +151,6 @@
 }
 
 /* ================= ПЛАВНОЕ ПЕРЕКЛЮЧЕНИЕ ТЕМЫ ================= */
-/* Плавная смена фона и цветов при переключении темы.
-   Только цветовые свойства — чтобы не сломать вёрстку и hover-анимации.
-*/
 html {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -166,7 +163,6 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Hero теперь тоже плавно меняет фон и текст при смене темы */
 .home {
   transition: background 0.3s ease, color 0.3s ease;
 }
@@ -215,6 +211,11 @@ body {
     inset -2px -2px -2px rgba(0, 0, 0, 0);
 }
 
+/* FIX: убрано общее правило `canvas { position: fixed; ... }` —
+   оно било по ЛЮБОМУ canvas на странице (включая будущие) и было
+   избыточным дублем правила #blobCanvas ниже. Вся стилизация блоб-канваса
+   теперь только в одном месте — в блоке #blobCanvas в конце файла. */
+
 /* ================= NAVBAR ================= */
 
 .navbar {
@@ -228,8 +229,6 @@ body {
   font-family: "Ubuntu", sans-serif;
   transition: padding 0.3s ease;
   z-index: 9999;
-  /* FIX: iOS — держим навбар на отдельном GPU-слое, иначе backdrop-filter
-     внутри .max-width заставляет Safari "отклеивать" fixed от вьюпорта во время скролла */
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
   will-change: transform;
@@ -251,7 +250,7 @@ body {
   background: var(--nav-bg-sticky);
   border: 1px solid var(--nav-pill-border);
   backdrop-filter: blur(16px) saturate(150%);
-  -webkit-backdrop-filter: blur(16px) saturate(150%); /* FIX: iOS */
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -341,9 +340,9 @@ body {
   position: fixed;
   height: 45px;
   width: 42px;
-  background: rgba(192, 105, 78, 0.3); /* FIX: iOS */
+  background: rgba(192, 105, 78, 0.3);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px); /* FIX: iOS */
+  -webkit-backdrop-filter: blur(16px);
   right: 30px;
   bottom: 10px;
   text-align: center;
@@ -366,27 +365,18 @@ body {
 
 /* ================= HOME ================= */
 
-/* FIX: z-index стек для particles.js
-   0 — blob
-   1 — .home::before (overlay)
-   2 — #particles-js
-   3 — .home::after (bottom fade)
-   4 — .home .max-width (контент)
-*/
-
 #particles-js {
   height: 100vh;
   width: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1; /* FIX: частицы видны поверх overlay */
+  z-index: 1;
   pointer-events: none;
   overflow: hidden;
-  max-width: 100%; /* FIX: не выезжает за экран */
+  max-width: 100%;
 }
 
-/* FIX: canvas внутри particles тоже */
 #particles-js canvas {
   position: absolute !important;
   top: 0;
@@ -407,22 +397,18 @@ body {
   position: relative;
 }
 
-/* FIX: background-attachment: fixed ломается на iOS */
 @supports (-webkit-touch-callout: none) {
   .home {
     background-attachment: scroll;
     background: radial-gradient(circle at center, var(--hero-grad-start) 0%, var(--hero-grad-end) 100%);
   }
 
-  /* FIX: iOS — тяжёлый backdrop-filter на fixed-навбаре лагает при скролле
-     и Safari визуально "отклеивает" пилюлю от вьюпорта; урезаем блюр только на iOS */
   .navbar .max-width {
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
   }
 }
 
-/* overlay */
 .home::before {
   content: "";
   position: absolute;
@@ -437,14 +423,13 @@ body {
   pointer-events: none;
 }
 
-/* bottom fade */
 .home::after {
   content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 200px; /* FIX: плавный переход в features */
+  height: 200px;
   background: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0) 0%,
@@ -458,7 +443,7 @@ body {
 .home .max-width {
   margin: auto 0 auto 150px;
   position: relative;
-  z-index: 4; /* FIX: контент поверх частиц */
+  z-index: 4;
 }
 
 .home .home-content .text-1 {
@@ -488,7 +473,7 @@ body {
   padding: 12px 35px;
   background: var(--accent-dim);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px); /* FIX: iOS */
+  -webkit-backdrop-filter: blur(16px);
   font-size: 17px;
   font-weight: 500;
   color: var(--pain-text);
@@ -696,7 +681,7 @@ section .title::after {
   position: relative;
   z-index: 3;
   margin-top: 0;
-  padding-top: 120px; /* FIX: плавный переход */
+  padding-top: 120px;
 }
 
 .features::before {
@@ -704,7 +689,6 @@ section .title::after {
   opacity: 0.6;
 }
 
-/* ✨ СИЯНИЕ ОТ BLOB */
 .features::after {
   content: "";
   position: absolute;
@@ -713,12 +697,12 @@ section .title::after {
   transform: translateX(-50%);
   width: 1400px;
   height: 400px;
-  filter: blur(120px); /* heavy — reduced on mobile via media query */
+  filter: blur(120px);
   mix-blend-mode: screen;
   opacity: 0.7;
   z-index: 2;
   pointer-events: none;
-  max-width: 100%; /* FIX: не выезжает */
+  max-width: 100%;
   overflow: hidden;
 }
 
@@ -728,7 +712,7 @@ section .title::after {
   grid-template-columns: repeat(
     auto-fit,
     minmax(min(340px, 100%), 1fr)
-  ); /* FIX: мобайл */
+  );
   gap: 25px;
   padding: 20px 0;
 }
@@ -779,7 +763,6 @@ section .title::after {
   position: relative;
 }
 
-/* Псевдоэлемент — сам градиент. opacity анимируется плавно */
 .dm-glow-card::before {
   content: "";
   position: absolute;
@@ -801,13 +784,11 @@ section .title::after {
   opacity: 1;
 }
 
-/* Контент поверх псевдоэлемента */
 .dm-glow-card .box {
   position: relative;
   z-index: 1;
 }
 
-/* Цвета свечения для каждой карточки */
 .dm-glow-card.glow-music {
   --glow-color: rgba(168, 85, 247, 0.22);
 }
@@ -836,8 +817,6 @@ section .title::after {
   border: 1px solid var(--card-border);
   transition: border-color 0.4s ease;
   position: relative;
-  /* overflow: hidden убран — режет края при анимации owl-carousel */
-  /* glow обрезается через mask-image на ::before */
 }
 
 .contributors .carousel .cardd::before {
@@ -867,7 +846,6 @@ section .title::after {
   border-color: var(--card-border-hover);
 }
 
-/* Цвета свечения по первому бейджику */
 .contributors .carousel .cardd.glow-owner {
   --glow-color: rgba(192, 105, 78, 0.3);
 }
@@ -892,7 +870,6 @@ section .title::after {
 }
 
 .contributors .carousel .cardd:hover .boxx {
-  /* убран scale — карточка теперь двигается целиком */
 }
 
 .contributors .carousel .cardd .text {
@@ -910,40 +887,8 @@ section .title::after {
   transition: all 0.3s ease;
 }
 
+/* ================= THEME TOGGLE / BADGES ================= */
 
-/* ================= BADGES ================= */
-
-/*.badges {
-  padding: 5px 10px;
-  color: black;
-  border: 1px solid black;
-  border-radius: 5px;
-  font-family: "Poppins", sans-serif;
-}
-
-.badges.owner {
-  background: #c0694e;
-}
-.badges.developer {
-  background: orange;
-}
-.badges.supporter {
-  background: #ff1476;
-}
-.badges.designer {
-  background: #315dd4;
-}
-.badges.helper {
-  background: #7289da;
-}
-.badges.tester {
-  background: #58a6a7;
-}
-.badges.friend {
-  background: #c1ff98;
-}
-
-/* ==================== THEME TOGGLE ==================== */
 .theme-toggle {
   display: flex;
   align-items: center;
@@ -979,7 +924,6 @@ section .title::after {
   height: 18px;
 }
 
-/* ==================== BADGE ==================== */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -1017,7 +961,6 @@ section .title::after {
   border-color: var(--border);
 }
 
-/* Кастомные цвета */
 .badge-blue { background-color: #dbeafe; color: #1e40af; border-color: #bfdbfe; }
 .dark .badge-blue { background-color: #1e3a8a; color: #93c5fd; border-color: #1e40af; }
 
@@ -1060,7 +1003,7 @@ section .title::after {
   border: 1px solid var(--border);
   background: var(--switcher-bg);
   backdrop-filter: blur(16px) saturate(150%);
-  -webkit-backdrop-filter: blur(16px) saturate(150%); /* FIX: iOS */
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
   color: var(--text-primary);
   transition: all 0.2s ease;
   cursor: pointer;
@@ -1082,11 +1025,6 @@ section .title::after {
   transition: opacity 0.15s ease-out, transform 0.15s ease-out;
   pointer-events: none;
   font-family: "Ubuntu", sans-serif;
-  /* position: fixed + top/left/фон/блюр/бордер/тень задаются через JS (dropdown.js).
-     Меню вынесено из .navbar (position: fixed + свой backdrop-filter при .sticky),
-     иначе вложенные backdrop-filter конфликтуют и блюр пропадает при скролле.
-     font-family прописан явно — раньше наследовался от .navbar, а после переноса
-     в <body> это наследование терялось. */
 }
 
 .dropdown.show {
@@ -1112,7 +1050,7 @@ section .title::after {
   cursor: pointer;
   transition: background-color 0.1s;
   color: var(--text-primary);
-  text-decoration: none; /* пункты мобильной навигации — это <a>, убираем подчёркивание */
+  text-decoration: none;
 }
 
 .dropdown-item:hover {
@@ -1139,9 +1077,6 @@ section .title::after {
   margin: 4px 0;
 }
 
-/* Пункты навигации (Главная/Возможности/Команда/Документация) внутри дропдауна
-   настроек: на десктопе не нужны — там уже видна .navbar .menu, показываем
-   только на мобильном, где раньше было отдельное полноэкранное меню. */
 .dropdown-mobile-nav {
   display: none;
 }
@@ -1157,7 +1092,6 @@ section .title::after {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
-/* ---- Inline language accordion (unified with the settings panel) ---- */
 .lang-caret {
   margin-left: auto;
   flex-shrink: 0;
@@ -1297,16 +1231,16 @@ section .title::after {
   }
 }
 
-/* ================= BLOB ================= */
+/* ================= BLOB (legacy div, оставлено на всякий случай) ================= */
 
 .home .blob-outer-container {
   position: absolute;
   inset: 0;
   z-index: 0;
-  filter: blur(300px); /* heavy — reduced on mobile via media query */
+  filter: blur(300px);
   pointer-events: none;
   overflow: hidden;
-  max-width: 100%; /* FIX: не выезжает */
+  max-width: 100%;
 }
 
 .home .blob-inner-container {
@@ -1338,7 +1272,7 @@ section .title::after {
     #3498db,
     #0f1011
   );
-  background-color: #c0694e; /* FIX: iOS fallback для conic-gradient */
+  background-color: #c0694e;
   animation: spinBlob 12s linear infinite;
 }
 
@@ -1372,7 +1306,7 @@ footer {
   align-items: flex-start;
   gap: 60px;
   flex-wrap: wrap;
-  box-sizing: border-box; /* FIX: не выезжает */
+  box-sizing: border-box;
 }
 
 .footer-brand {
@@ -1407,11 +1341,6 @@ footer {
   transition: all 0.3s ease;
 }
 
-/* Уникальное фирменное свечение под каждую соцсеть — переопределяет
-   общий цвет/тень выше именно на самой иконке (правило нацелено на
-   конкретный вложенный элемент, поэтому оно приоритетнее).
-   transition — на базовом состоянии, а не в :hover, иначе анимируется
-   только "включение" свечения, а при уходе курсора оно пропадает рывком. */
 .social-link .fa-github,
 .social-link .fa-x-twitter,
 .social-link .fa-instagram,
@@ -1426,8 +1355,6 @@ footer {
   transform: translateY(-2px);
 }
 
-/* На светлой теме почти белый цвет потерялся бы на светлом фоне подвала —
-   берём тёмный фирменный цвет GitHub вместо него. */
 body:not(.dark) .social-link:hover .fa-github {
   color: #24292f;
   filter: drop-shadow(0 0 6px rgba(36, 41, 47, 0.35))
@@ -1491,9 +1418,6 @@ body:not(.dark) .social-link:hover .fa-github {
   transform: translateX(3px);
 }
 
-/* Уникальное фирменное свечение для блока "Поддержка" — красим весь линк
-   (иконку + текст) в цвет бренда, а не только иконку, как раньше.
-   transition на базовом состоянии, чтобы анимация была плавной в обе стороны. */
 .footer-link .fa-patreon,
 .footer-link .fa-discord {
   transition: color 0.3s ease, filter 0.3s ease;
@@ -1530,7 +1454,7 @@ body:not(.dark) .social-link:hover .fa-github {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  box-sizing: border-box; /* FIX: не выезжает */
+  box-sizing: border-box;
 }
 
 .copyright {
@@ -1578,7 +1502,7 @@ body:not(.dark) .social-link:hover .fa-github {
   padding: 7px 10px;
   background: var(--switcher-bg);
   backdrop-filter: blur(16px) saturate(150%);
-  -webkit-backdrop-filter: blur(16px) saturate(150%); /* FIX: iOS */
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
   border: 1px solid var(--border);
   border-radius: 8px;
   cursor: pointer;
@@ -1686,7 +1610,7 @@ body:not(.dark) .social-link:hover .fa-github {
   font-family: 'Poppins', sans-serif;
 }
 
-/* ================= RESPONSIVE — ДЕСКТОП (без изменений) ================= */
+/* ================= RESPONSIVE — ДЕСКТОП ================= */
 
 @media (max-width: 1100px) {
   .home .max-width {
@@ -1703,7 +1627,6 @@ body:not(.dark) .social-link:hover .fa-github {
 /* ================= RESPONSIVE — МОБАЙЛ ================= */
 
 @media (max-width: 950px) {
-  /* Бургер */
   .menu-btn {
     display: block;
     z-index: 999;
@@ -1713,9 +1636,6 @@ body:not(.dark) .social-link:hover .fa-github {
     content: "\f00d";
   }
 
-  /* Полноэкранное меню удалено — на мобильном пункты навигации теперь
-     живут внутри дропдауна настроек (см. .dropdown-mobile-nav выше),
-     поэтому инлайновый список .navbar .menu на мобильном просто скрыт. */
   .navbar .menu {
     display: none;
   }
@@ -1725,7 +1645,6 @@ body:not(.dark) .social-link:hover .fa-github {
     display: block;
   }
 
-  /* FIX: language switcher в мобильном меню — не растягивается */
   .language-switcher-container {
     display: flex;
     justify-content: center;
@@ -1754,8 +1673,6 @@ body:not(.dark) .social-link:hover .fa-github {
     min-width: 230px;
   }
 
-  /* FIX: на мобильном сам дропдаун настроек/навигации крупнее — легче попасть
-     пальцем: шире блок, крупнее пункты, отступы и иконки */
   .dropdown {
     min-width: 245px;
     padding: 5px;
@@ -1774,7 +1691,6 @@ body:not(.dark) .social-link:hover .fa-github {
     font-size: 0.95rem;
   }
 
-  /* Toast: по центру в одну строку на мобайле */
   .toast {
     left: 50% !important;
     right: auto !important;
@@ -1787,7 +1703,6 @@ body:not(.dark) .social-link:hover .fa-github {
     gap: 8px;
   }
 
-  /* Home текст */
   .home .home-content .text-2 {
     font-size: 70px;
   }
@@ -1800,7 +1715,6 @@ body:not(.dark) .social-link:hover .fa-github {
     padding: 10px 30px;
   }
 
-  /* Кнопка Discord */
   .this-is-pain {
     font-size: 18px;
     padding: 10px 24px;
@@ -1817,7 +1731,6 @@ body:not(.dark) .social-link:hover .fa-github {
     padding: 0 25px;
   }
 
-  /* Home не выезжает */
   .home .max-width {
     margin: auto;
     padding: 0 25px;
@@ -1848,7 +1761,6 @@ body:not(.dark) .social-link:hover .fa-github {
     margin-right: auto;
   }
 
-  /* Карточки — полная ширина */
   .features .features-content {
     grid-template-columns: 1fr;
   }
@@ -1906,27 +1818,22 @@ body:not(.dark) .social-link:hover .fa-github {
 
 /* ================= iOS PERFORMANCE FIXES ================= */
 
-/* На iOS (touch устройства) отключаем тяжёлые GPU-операции */
 @media (max-width: 950px) {
-  /* Blob: уменьшаем blur с 300px до 80px — визуально похоже, в 3x легче для GPU */
   .home .blob-outer-container {
     filter: blur(80px);
     opacity: 0.25;
   }
 
-  /* Features glow: убираем blur(120px) */
   .features::after {
     filter: none;
     opacity: 0;
   }
 
-  /* Blob анимация: замедляем для экономии CPU */
   .home .blob {
     animation-duration: 20s;
   }
 }
 
-/* Доп. оптимизация для совсем маленьких экранов */
 @media (max-width: 500px) {
 }
 
@@ -2032,7 +1939,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--body-fallback-bg); /* адаптивный фон под тему */
+  background: var(--body-fallback-bg);
 }
 
 footer {
@@ -2041,12 +1948,10 @@ footer {
   padding-bottom: 0 !important;
 }
 
-/* Убрать возможные отступы у последнего элемента перед футером */
 body > :last-child:not(footer) {
   margin-bottom: 0;
 }
 
-/* Дополнительная страховка для iOS */
 @supports (-webkit-touch-callout: none) {
   body {
     min-height: -webkit-fill-available;
@@ -2056,8 +1961,8 @@ body > :last-child:not(footer) {
   }
 }
 
-/* ================= ДОПОЛНИТЕЛЬНЫЕ ПЛАВНЫЕ ПЕРЕХОДЫ ДЛЯ ТЕМЫ (в конце файла) ================= */
-/* Только цветовые свойства — безопасно для вёрстки */
+/* ================= ДОПОЛНИТЕЛЬНЫЕ ПЛАВНЫЕ ПЕРЕХОДЫ ДЛЯ ТЕМЫ ================= */
+
 .features,
 .contributors,
 footer,
@@ -2072,4 +1977,24 @@ section .title::before,
 section .title::after,
 .this-is-pain {
   transition: all 0.3s ease;
+}
+
+/* ================= BLOB CANVAS (fistashkin blobs.js) ================= */
+/* FIX: z-index был -1 → канвас рисовался ниже непрозрачного фона .home
+   (`.home` не создаёт свой stacking context, поэтому отрицательный
+   z-index уводил fixed-канвас на самое дно документа — под ЛЮБОЙ
+   непрозрачный фон, включая radial-gradient самого .home).
+   z-index: 0 держит канвас в той же локальной "пачке" слоёв, что и
+   .home, но рисуется сразу после её фона — то есть поверх градиента,
+   и при этом ниже .home::before (z-index:1), #particles-js (z-index:1)
+   и контента .home .max-width (z-index:4), как и задумано. */
+#blobCanvas {
+  position: absolute;   /* было fixed */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  display: block;
 }
