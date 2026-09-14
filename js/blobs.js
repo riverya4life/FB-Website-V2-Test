@@ -8,18 +8,28 @@ let animationId;
 // а на iOS 100vh физически меняется вместе с адрес-баром при скролле —
 // сам блок .home то выше, то ниже, поэтому канвас внутри него всё равно
 // чуть растягивался/сдвигался, даже когда мы перестали трогать его
-// разрешение напрямую. Фиксируем высоту через CSS-переменную --vh,
-// которую обновляем только при реальном изменении ШИРИНЫ (см. ниже) —
-// значит .home перестаёт менять размер при скролле вообще, и блобам
-// внутри канваса физически некуда сдвигаться.
+// разрешение напрямую. Фиксируем высоту через CSS-переменную --vh.
+// Меряем не просто window.innerHeight (он может быть снят как в момент
+// свёрнутого, так и развёрнутого адрес-бара — от этого зависело бы,
+// станет ли .home чуть выше или чуть ниже реального экрана), а МАКСИМУМ
+// из innerHeight и screen.height — то есть сразу берём высоту, которой
+// заведомо хватит на самый большой возможный видимый вьюпорт устройства.
+// Тогда .home никогда не нужно "дорастать" при скрытии тулбара, и блобам
+// внутри канваса физически некуда сдвигаться — секция уже максимального
+// размера с самого начала. Обновляем --vh только при реальном изменении
+// ШИРИНЫ (поворот экрана), см. ниже.
+function getMaxViewportHeight() {
+  return Math.max(window.innerHeight, window.screen.height || 0);
+}
+
 function setViewportHeightVar() {
-  document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+  document.documentElement.style.setProperty('--vh', getMaxViewportHeight() * 0.01 + 'px');
 }
 setViewportHeightVar();
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  canvas.height = getMaxViewportHeight();
   blobs = [];
   createBlobs();
 }
@@ -56,7 +66,7 @@ function handleResize() {
     if (widthChanged) {
       setViewportHeightVar();
       canvas.width = newWidth;
-      canvas.height = window.innerHeight;
+      canvas.height = getMaxViewportHeight();
       blobs = [];
       createBlobs();
       lastWidth = newWidth;
