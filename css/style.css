@@ -366,7 +366,8 @@ body {
 /* ================= HOME ================= */
 
 #particles-js {
-  height: 100vh;
+  height: 100vh; /* фолбэк, если JS не отработал */
+  height: calc(var(--vh, 1vh) * 100);
   width: 100%;
   position: absolute;
   top: 0;
@@ -390,7 +391,8 @@ body {
   background: radial-gradient(circle at center, var(--hero-grad-start) 0%, var(--hero-grad-end) 100%);
   background-size: cover;
   background-attachment: fixed;
-  height: 100vh;
+  height: 100vh; /* фолбэк, если JS не отработал */
+  height: calc(var(--vh, 1vh) * 100);
   color: var(--hero-text);
   min-height: 500px;
   font-family: "Ubuntu", sans-serif;
